@@ -3,6 +3,17 @@ using CalculatorApp.Operations;
 namespace CalculatorApp;
 
 public static class CalculatorApp {
+    private enum MenuOptions {
+        Addition,
+        Subtraction,
+        Multiplication,
+        Division,
+        Modulus,
+        Exponents,
+        SquareRoot,
+        Exit
+    };
+
     public static void Run() {
         Console.WriteLine("Welcome to Calculator App\n");
         while (true) {
@@ -24,6 +35,15 @@ public static class CalculatorApp {
                     DisplayResult(OperationFactory.GetOperation("/"), numbers);
                     break;
                 case '5':
+                    DisplayResult(OperationFactory.GetOperation("%"), numbers);
+                    break;
+                case '6':
+                    DisplayResult(OperationFactory.GetOperation("^"), numbers);
+                    break;
+                case '7':
+                    DisplayResult(OperationFactory.GetOperation("r"), numbers);
+                    break;
+                case '8':
                     Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
                     if (char.ToUpper(Console.ReadKey().KeyChar) == 'Y') {
                         Console.WriteLine("\nExiting application...");
@@ -44,8 +64,7 @@ public static class CalculatorApp {
         int menuItemNumber = 1;
         Console.WriteLine("Please press a number to select an option: ");
         foreach (MenuOptions menuOption in Enum.GetValues(typeof(MenuOptions))) {
-            Console.WriteLine($"[{menuItemNumber}] - {menuOption}");
-            menuItemNumber++;
+            Console.WriteLine($"[{menuItemNumber++}] - {menuOption}");
         }
     }
 

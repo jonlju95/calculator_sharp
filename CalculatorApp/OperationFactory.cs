@@ -13,6 +13,10 @@ public abstract class OperationFactory {
         { "-", new Subtraction() },
         { "*", new Multiplication() },
         { "/", new Division() },
+        { "%", new Modulus() },
+        { "^", new Exponent() },
+        { "r", new SquareRoot() },
+
     };
 
     /// <summary>
