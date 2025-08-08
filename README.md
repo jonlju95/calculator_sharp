@@ -1,13 +1,9 @@
 # Console Calculator (C#)
 
----
-
 ## Purpose
 
 This project is a **console-based calculator** written in C#, 
 created as part of a programming assignment.
-
----
 
 ## Features
 
@@ -22,8 +18,6 @@ The calculator can:
 - Keep running until the user explicitly chooses to exit
 - Handle both `.` and `,` as decimal separators (adapted to current culture)
 - Clean up and validate user input before processing
-
----
 
 ## Code structure
 
