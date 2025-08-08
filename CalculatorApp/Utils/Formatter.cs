@@ -18,8 +18,7 @@ public static class Formatter {
 
 	public static bool TryParseCleanedInput(string input, out double number) {
 		string cleaned = RemoveWhitespace(input);
-		string formatted =  FormatDecimalSeparator(cleaned);
+		string formatted = FormatDecimalSeparator(cleaned);
 		return double.TryParse(formatted, out number);
 	}
-
 }

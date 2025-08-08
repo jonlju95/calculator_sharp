@@ -3,65 +3,65 @@ using CalculatorApp.Utils;
 namespace CalculatorApp;
 
 public static class CalculatorApp {
-    private static bool programRunning = true;
+	private static bool programRunning = true;
 
-    public static void Run() {
-        Console.WriteLine("Welcome to Calculator App\n");
-        while (programRunning) {
-            Printer.DisplayMenu();
+	public static void Run() {
+		Console.WriteLine("Welcome to Calculator App\n");
+		while (programRunning) {
+			Printer.DisplayMenu();
 
-            Console.Write("\nOption: ");
+			Console.Write("\nOption: ");
 
-            HandleSelectedOption(char.ToUpper(Console.ReadKey().KeyChar));
-        }
-    }
+			HandleSelectedOption(char.ToUpper(Console.ReadKey().KeyChar));
+		}
+	}
 
-    private static List<double> AddNumbers() {
-        List<double> numbers = [];
+	private static void HandleSelectedOption(char userInput) {
+		Dictionary<char, string> operationMap = new Dictionary<char, string> {
+			{ '1', "+" },
+			{ '2', "-" },
+			{ '3', "*" },
+			{ '4', "/" },
+			{ '5', "%" },
+			{ '6', "^" },
+			{ '7', "r" }
+		};
 
-        Console.WriteLine("\nEnter numbers to count with. Press [Enter] without any number to continue\n");
-        while (true) {
-            Console.Write($"Number {numbers.Count + 1}: ");
-            string? userInput = Console.ReadLine();
+		if (operationMap.TryGetValue(userInput, out string? symbol)) {
+			Printer.DisplayResult(OperationFactory.GetOperation(symbol), AddNumbers());
+		} else if (userInput == '8') {
+			Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
 
-            if (string.IsNullOrEmpty(userInput)) {
-                return numbers;
-            }
+			if (char.ToUpper(Console.ReadKey().KeyChar) == 'Y') {
+				Console.WriteLine("\nExiting application...");
+				programRunning = false;
+			}
 
-            if (!Formatter.TryParseCleanedInput(userInput, out double number)) {
-                Printer.PrintError("Invalid number");
-                continue;
-            }
+			Console.Clear();
+		} else {
+			Console.Clear();
+			Console.Error.WriteLine("\nInvalid input, please try again.\n");
+		}
+	}
 
-            numbers.Add(number);
-        }
-    }
+	private static List<double> AddNumbers() {
+		List<double> numbers = [];
 
-    private static void HandleSelectedOption(char userInput) {
-        Dictionary<char, string> operationMap = new Dictionary<char, string> {
-            { '1', "+" },
-            { '2', "-" },
-            { '3', "*" },
-            { '4', "/" },
-            { '5', "%" },
-            { '6', "^" },
-            { '7', "r" }
-        };
+		Console.WriteLine("\nEnter numbers to count with. Press [Enter] without any number to continue\n");
+		while (true) {
+			Console.Write($"Number {numbers.Count + 1}: ");
+			string? userInput = Console.ReadLine();
 
-        if (operationMap.TryGetValue(userInput, out string? symbol)) {
-            Printer.DisplayResult(OperationFactory.GetOperation(symbol), AddNumbers());
-        } else if (userInput == '8') {
-            Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
+			if (string.IsNullOrEmpty(userInput)) {
+				return numbers;
+			}
 
-            if (char.ToUpper(Console.ReadKey().KeyChar) == 'Y') {
-                Console.WriteLine("\nExiting application...");
-                programRunning = false;
-            }
+			if (!Formatter.TryParseCleanedInput(userInput, out double number)) {
+				Printer.PrintError("Invalid number");
+				continue;
+			}
 
-            Console.Clear();
-        } else {
-            Console.Clear();
-            Console.Error.WriteLine("\nInvalid input, please try again.\n");
-        }
-    }
+			numbers.Add(number);
+		}
+	}
 }
