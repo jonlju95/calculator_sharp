@@ -1,6 +1,6 @@
 using CalculatorApp.Operations;
 
-namespace CalculatorApp;
+namespace CalculatorApp.Utils;
 
 public abstract class OperationFactory {
 	private static readonly Dictionary<string, IOperation> Operations = new Dictionary<string, IOperation> {

@@ -1,3 +1,4 @@
+using CalculatorApp.Interfaces;
 using CalculatorApp.Utils;
 
 namespace CalculatorApp;
@@ -5,34 +6,26 @@ namespace CalculatorApp;
 public static class CalculatorApp {
 	private static bool programRunning = true;
 
-	public static void Run() {
+	public static void Run(IUserInput userInput) {
 		Console.WriteLine("Welcome to Calculator App\n");
 		while (programRunning) {
 			Printer.DisplayMenu();
 
 			Console.Write("\nOption: ");
 
-			HandleSelectedOption(char.ToUpper(Console.ReadKey().KeyChar));
+			HandleSelectedOption(userInput.GetOption());
 		}
 	}
 
 	private static void HandleSelectedOption(char userInput) {
-		Dictionary<char, string> operationMap = new Dictionary<char, string> {
-			{ '1', "+" },
-			{ '2', "-" },
-			{ '3', "*" },
-			{ '4', "/" },
-			{ '5', "%" },
-			{ '6', "^" },
-			{ '7', "r" }
-		};
+		string? symbol = OperationSelector.GetSymbolForInput(userInput);
 
-		if (operationMap.TryGetValue(userInput, out string? symbol)) {
+		if (symbol != null) {
 			Printer.DisplayResult(OperationFactory.GetOperation(symbol), AddNumbers());
 		} else if (userInput == '8') {
 			Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
 
-			if (char.ToUpper(Console.ReadKey().KeyChar) == 'Y') {
+			if (ConfirmExit()) {
 				Console.WriteLine("\nExiting application...");
 				programRunning = false;
 			}
@@ -63,5 +56,10 @@ public static class CalculatorApp {
 
 			numbers.Add(number);
 		}
+	}
+
+	private static bool ConfirmExit() {
+		Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
+		return char.ToUpper(Console.ReadKey().KeyChar) == 'Y';
 	}
 }

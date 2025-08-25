@@ -1,7 +1,9 @@
-﻿namespace CalculatorApp {
+﻿using CalculatorApp.Utils;
+
+namespace CalculatorApp {
 	internal static class Program {
-		private static void Main(string[] args) {
-			CalculatorApp.Run();
+		private static void Main() {
+			CalculatorApp.Run(new ConsoleUserInput());
 		}
 	}
 }

@@ -2,6 +2,16 @@ namespace CalculatorApp.Utils;
 
 public static class Formatter {
 
+	public static bool TryParseCleanedInput(string input, out double number) {
+		string cleaned = RemoveWhitespace(input);
+		string formatted = FormatDecimalSeparator(cleaned);
+		return double.TryParse(formatted, out number);
+	}
+
+	private static string RemoveWhitespace(string input) {
+		return input.Trim().Replace(" ", "");
+	}
+
 	private static string FormatDecimalSeparator(string input) {
 		char decimalSeparator = Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
@@ -10,15 +20,5 @@ public static class Formatter {
 		}
 
 		return input.Replace(',', decimalSeparator).Replace('.', decimalSeparator);
-	}
-
-	private static string RemoveWhitespace(string input) {
-		return input.Trim().Replace(" ", "");
-	}
-
-	public static bool TryParseCleanedInput(string input, out double number) {
-		string cleaned = RemoveWhitespace(input);
-		string formatted = FormatDecimalSeparator(cleaned);
-		return double.TryParse(formatted, out number);
 	}
 }
