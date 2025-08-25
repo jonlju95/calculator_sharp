@@ -1,4 +1,4 @@
-namespace CalculatorApp.Utils;
+namespace CalculatorApp.Menu;
 
 public static class OperationSelector {
 	private static readonly Dictionary<char, string> operationMap = new Dictionary<char, string> {

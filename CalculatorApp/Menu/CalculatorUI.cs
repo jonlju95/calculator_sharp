@@ -1,8 +1,8 @@
-using CalculatorApp.Operations;
+using CalculatorApp.Interfaces;
 
-namespace CalculatorApp.Utils;
+namespace CalculatorApp.Menu;
 
-public static class Printer {
+public class CalculatorUI : IUserOutput {
 	private static readonly string[] MenuOptions = [
 		"Addition",
 		"Subtraction",
@@ -14,7 +14,11 @@ public static class Printer {
 		"Exit"
 	];
 
-	public static void DisplayMenu() {
+	public void ShowWelcome() {
+		Console.WriteLine("Welcome to Calculator App\n");
+	}
+
+	public void DisplayMenu() {
 		int menuItemNumber = 1;
 		Console.WriteLine("Please press a number to select an option: ");
 		foreach (string menuOption in MenuOptions) {
@@ -22,24 +26,11 @@ public static class Printer {
 		}
 	}
 
-	public static void DisplayResult(IOperation? operation, List<double> numbers) {
-		try {
-			double result = numbers[0];
-			if (operation != null) {
-				for (int i = 1; i < numbers.Count; i++) {
-					result = operation.Calculate(result, numbers[i]);
-				}
-			} else {
-				PrintError("Invalid operation");
-			}
-
-			Console.WriteLine($"Result: {result}\n");
-		} catch (Exception e) {
-			PrintError(e.Message);
-		}
+	public void DisplayResult(double result) {
+		Console.WriteLine($"Result: {result}\n");
 	}
 
-	public static void PrintError(string message) {
+	public void PrintError(string message) {
 		Console.ForegroundColor = ConsoleColor.Red;
 		Console.WriteLine($"{message}\n");
 		Console.ResetColor();

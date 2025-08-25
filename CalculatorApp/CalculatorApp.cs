@@ -1,31 +1,37 @@
 using CalculatorApp.Interfaces;
+using CalculatorApp.Menu;
 using CalculatorApp.Utils;
 
 namespace CalculatorApp;
 
-public static class CalculatorApp {
+public class CalculatorApp(IUserOutput calculatorUi, IUserInput userInput) {
 	private static bool programRunning = true;
 
-	public static void Run(IUserInput userInput) {
-		Console.WriteLine("Welcome to Calculator App\n");
+	public void Run() {
+		calculatorUi.ShowWelcome();
 		while (programRunning) {
-			Printer.DisplayMenu();
+			calculatorUi.DisplayMenu();
 
 			Console.Write("\nOption: ");
 
-			HandleSelectedOption(userInput.GetOption());
+			this.HandleSelectedOption(userInput.GetOption());
 		}
 	}
 
-	private static void HandleSelectedOption(char userInput) {
-		string? symbol = OperationSelector.GetSymbolForInput(userInput);
+	private void HandleSelectedOption(char charInput) {
+		string? symbol = OperationSelector.GetSymbolForInput(charInput);
 
 		if (symbol != null) {
-			Printer.DisplayResult(OperationFactory.GetOperation(symbol), AddNumbers());
-		} else if (userInput == '8') {
+			try {
+				double result = CalculatorLogic.CalculateResult(OperationFactory.GetOperation(symbol), AddNumbers());
+				calculatorUi.DisplayResult(result);
+			} catch (Exception e) {
+				calculatorUi.PrintError(e.Message);
+			}
+		} else if (charInput == '8') {
 			Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
 
-			if (ConfirmExit()) {
+			if (userInput.GetConfirmExitPrompt()) {
 				Console.WriteLine("\nExiting application...");
 				programRunning = false;
 			}
@@ -33,33 +39,27 @@ public static class CalculatorApp {
 			Console.Clear();
 		} else {
 			Console.Clear();
-			Console.Error.WriteLine("\nInvalid input, please try again.\n");
+			calculatorUi.PrintError("\nInvalid input, please try again.");
 		}
 	}
 
-	private static List<double> AddNumbers() {
+	private List<double> AddNumbers() {
 		List<double> numbers = [];
 
 		Console.WriteLine("\nEnter numbers to count with. Press [Enter] without any number to continue\n");
 		while (true) {
-			Console.Write($"Number {numbers.Count + 1}: ");
-			string? userInput = Console.ReadLine();
+			string? input = userInput.GetNumberPrompt(numbers.Count + 1);
 
-			if (string.IsNullOrEmpty(userInput)) {
+			if (string.IsNullOrEmpty(input)) {
 				return numbers;
 			}
 
-			if (!Formatter.TryParseCleanedInput(userInput, out double number)) {
-				Printer.PrintError("Invalid number");
+			if (!Formatter.TryParseCleanedInput(input, out double number)) {
+				calculatorUi.PrintError("Invalid number");
 				continue;
 			}
 
 			numbers.Add(number);
 		}
-	}
-
-	private static bool ConfirmExit() {
-		Console.Write("\nAre you sure you want to exit the application? (Y/N): ");
-		return char.ToUpper(Console.ReadKey().KeyChar) == 'Y';
 	}
 }
