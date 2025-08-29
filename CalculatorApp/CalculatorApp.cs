@@ -23,7 +23,7 @@ public class CalculatorApp(IUserOutput calculatorUi, IUserInput userInput) {
 
 		if (symbol != null) {
 			try {
-				double result = CalculatorLogic.CalculateResult(OperationFactory.GetOperation(symbol), AddNumbers());
+				double result = CalculatorLogic.CalculateResult(OperationFactory.GetOperation(symbol), this.AddNumbers());
 				calculatorUi.DisplayResult(result);
 			} catch (Exception e) {
 				calculatorUi.PrintError(e.Message);
